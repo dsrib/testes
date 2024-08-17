@@ -10,9 +10,9 @@ from statsforecast.models import Naive, SeasonalNaive, SeasonalWindowAverage
 from sklearn.metrics import accuracy_score, mean_absolute_error, mean_squared_error
 from statsmodels.tsa.seasonal import seasonal_decompose
 import openpyxl
-import functions
-import visualizations
+
 from plotly.subplots import make_subplots
+
 # Função para carregar e processar os dados
 @st.cache_data
 def load_data():
