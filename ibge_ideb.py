@@ -24,79 +24,6 @@ def load_data():
 def main():
     piramide_etaria, dados_alunos, evolucao_ideb = load_data()
 
-## Limpeza dos dados
-
-# Retirar colunas desnecessárias para análise
-piramide_etaria.drop(['Município', 'Sigla UF', 'Código do Município', 'codMun'], axis=1, inplace=True)
-
-# Criar coluna com a soma da população por grupo de idade
-pop_list=['População feminina(pessoas)', 'População masculina(pessoas)']
-piramide_etaria['População por idade']=piramide_etaria[pop_list].sum(axis=1)
-
-# Calcular percentuais por faixa etária
-pop_total = piramide_etaria['População por idade'].sum()
-piramide_etaria['Percentual'] = (piramide_etaria['População por idade'] / pop_total * 100)
-
-# Selecionar faixas etárias atendidas pela Passos Mágicos: 7 a 26 anos (PEDE, 2022)
-piramide2 = piramide_etaria.set_index(['Grupo de idade']).T
-idade_escolar = ['5 a 9 anos', '10 a 14 anos', '15 a 19 anos', '20 a 24 anos']
-pop_escolar = piramide2[idade_escolar]
-
-# Calcular o total da população em idade escolar
-total_pop_escolar = pop_escolar.loc['População por idade'].sum()
-
-# Ordenar a população em idade escolar em ordem ascendente
-pop_escolar_ordenada = pop_escolar.sort_values(by='População por idade', axis=1)
-
-# Selecionar colunas para cálculo da idade dos alunos
-colunas_interesse = ['IdAluno', 'DataNascimento']
-idade_alunos = dados_alunos[colunas_interesse]
-
-# Retirar da tabela a linha com a migração incorreta
-idade_alunos2 = idade_alunos.drop(793)
-
-# Conversão da data de nascimento em data
-idade_alunos2['DataNascimento'] = pd.to_datetime(idade_alunos2['DataNascimento'])
-
-# Cálculo da idade
-idade_alunos2['Idade']=2022-idade_alunos2['DataNascimento'].dt.year
-
-# Agrupar alunos por faixa etária do IBGE
-fx_etaria = [
-    (idade_alunos2['Idade'] >= 5) & (idade_alunos2['Idade'] <= 9),
-    (idade_alunos2['Idade'] >= 10) & (idade_alunos2['Idade'] <= 14),
-    (idade_alunos2['Idade'] >= 15) & (idade_alunos2['Idade'] <= 19),
-    (idade_alunos2['Idade'] >= 20) & (idade_alunos2['Idade'] <= 24),
-    (idade_alunos2['Idade'] >= 25)
-]
-
-grupos = ['05 a 09 anos', '10 a 14 anos', '15 a 19 anos', '20 a 24 anos', '25 anos ou mais']
-idade_alunos2['Grupo de idade'] = np.select(fx_etaria, grupos)
-qtde_alunos_idade = idade_alunos2['Grupo de idade'].value_counts().sort_index()
-# Renomear o grupo 5 a 9 anos
-
-pop_escolar.rename(columns={'5 a 9 anos': '05 a 09 anos'}, inplace=True)
-pop_escolar
-
-pop_escolar2 = pop_escolar.transpose()
-pop_escolar2
-
-pop_escolar2['Alunos Passos Mágicos'] = qtde_alunos_idade
-pop_escolar2
-
-# Cálculo do percentual da população de Embu-Guaçu atendida pela ONG Passos Mágicos
-pop_escolar2['População atendida'] = (pop_escolar2['Alunos Passos Mágicos'] / pop_escolar2['População por idade']) * 100
-percentual_total = pop_escolar2['Alunos Passos Mágicos'].sum() / pop_escolar2['População por idade'].sum() * 100
-
-# Convert 'dependencia_id' to string type
-evolucao_ideb['dependencia_id'] = evolucao_ideb['dependencia_id'].astype(str)
-
-# Use a dictionary for mapping replacement values
-replace_dict = {'1': 'Federal', '2': 'Estadual', '3': 'Municipal', '4': 'Privada', '5': 'Pública'}
-evolucao_ideb['dependencia_id'] = evolucao_ideb['dependencia_id'].replace(replace_dict)
-evolucao_ideb.groupby(evolucao_ideb['ano'])['ciclo_id']
-
-
 # Função para gerar gráficos
 def plot_piramide_etaria(piramide_etaria):
     st.header("Pirâmide Etária de Embu-Guaçu")
@@ -137,6 +64,7 @@ def plot_piramide_etaria(piramide_etaria):
 def plot_alunos(dados_alunos):
     st.header("Idade dos Alunos da Passos Mágicos")
 
+    dados_alunos.drop[793]
     idade_alunos = dados_alunos[['IdAluno', 'DataNascimento']]
     idade_alunos['DataNascimento'] = pd.to_datetime(idade_alunos['DataNascimento'])
     idade_alunos['Idade'] = 2022 - idade_alunos['DataNascimento'].dt.year
