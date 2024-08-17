@@ -6,31 +6,12 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import pandas as pd
 
-@st.cache_data
-def load_data():
-    piramide_etaria = pd.read_csv('C:/Users/dalil/OneDrive/Documents/FIAP - Pós Data Analytics/Fase 05/Datathon/Censo 2022 - Pirâmide etária - Embu-Guacu (SP).csv', sep=';')
-    return piramide_etaria
-
-def main():
-    piramide_etaria = load_data()
-
-    if piramide_etaria is not None:
-        # Exemplo de manipulação de dados
-        st.write(piramide_etaria.head())
-        piramide_etaria.drop(['Município', 'Sigla UF', 'Código do Município', 'codMun'], axis=1, inplace=True)
-        st.write(piramide_etaria.head())
-    else:
-        st.write("Dados da pirâmide etária não foram carregados.")
-
-if __name__ == "__main__":
-    main()
-
 # Função para carregar e processar os dados
 @st.cache_data
 def load_data():
-    piramide_etaria = pd.read_csv('C:\Users\dalil\OneDrive\Documents\FIAP - Pós Data Analytics\Fase 05\Datathon\dados edu\Censo 2022 - Pirâmide etária - Embu-Guaçu (SP).csv', sep=';')
-    dados_alunos = pd.read_csv('C:/Users/dalil/OneDrive/Documents/FIAP - Pós Data Analytics/Fase 05/Datathon/Base de dados - Passos Mágicos/Base de dados - Passos Mágicos/TbAluno/Originais anonimizados/TbAluno.csv', sep=',')
-    evolucao_ideb = pd.read_excel('C:/Users/dalil/OneDrive/Documents/FIAP - Pós Data Analytics/Fase 05/Datathon/dados edu/evolucao_ideb.xlsx')
+    piramide_etaria = pd.read_csv('Censo 2022 - Pirâmide etária - Embu-Guaçu (SP).csv', sep=';')
+    dados_alunos = pd.read_csv('TbAluno.csv', sep=',')
+    evolucao_ideb = pd.read_excel('evolucao_ideb.xlsx')
     return piramide_etaria, dados_alunos, evolucao_ideb
 
 def main():
