@@ -28,7 +28,6 @@ def main():
 def plot_piramide_etaria(piramide_etaria):
     st.header("Pirâmide Etária de Embu-Guaçu")
 
-    piramide_etaria.drop(['Município', 'Sigla UF', 'Código do Município', 'codMun'], axis=1, inplace=True)
     piramide_etaria['População por idade'] = piramide_etaria[['População feminina(pessoas)', 'População masculina(pessoas)']].sum(axis=1)
     piramide_etaria['Percentual'] = (piramide_etaria['População por idade'] / piramide_etaria['População por idade'].sum() * 100)
 
